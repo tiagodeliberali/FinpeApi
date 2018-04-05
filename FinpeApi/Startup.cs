@@ -1,5 +1,6 @@
 ﻿using FinpeApi.Hubs;
 using FinpeApi.Models;
+using FinpeApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -20,8 +21,9 @@ namespace FinpeApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<FinpeDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<FinpeDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddTransient<IFinpeDbContext, FinpeDbContext>();
+            services.AddTransient<IFinancialService, FinancialService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors(options => 
@@ -29,7 +31,7 @@ namespace FinpeApi
                     builder
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    .WithOrigins("http://localhost:8080");
+                    .AllowAnyOrigin();
                 }));
             services.AddSignalR();
         }
@@ -45,7 +47,7 @@ namespace FinpeApi
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseCors("CorsPolicy");
             app.UseSignalR(routes =>
             {

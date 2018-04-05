@@ -1,5 +1,3 @@
-using FinpeApi.Services;
-using Moq;
 using Xunit;
 
 namespace FinpeApi.Test
@@ -10,8 +8,7 @@ namespace FinpeApi.Test
         public void AddStatement_ShouldNotify()
         {
             // Arrange
-            var notificationServiceMock = new Mock<INotificationService>();
-
+            
             // Act
 
             // Assert

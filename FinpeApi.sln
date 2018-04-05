@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27520.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinpeApi", "FinpeApi\FinpeApi.csproj", "{AB320C8D-81D0-4000-8E76-BECD3C99EFA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinpeApi.Test", "FinpeApi.Test\FinpeApi.Test.csproj", "{BA4EC534-145E-4DA2-A2D5-B43404FF6381}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinpeApi.Test", "FinpeApi.Test\FinpeApi.Test.csproj", "{BA4EC534-145E-4DA2-A2D5-B43404FF6381}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

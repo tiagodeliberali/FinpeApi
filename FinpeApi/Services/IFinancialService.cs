@@ -1,11 +1,12 @@
 ﻿using FinpeApi.Models.AppStates;
+using System.Threading.Tasks;
 
 namespace FinpeApi.Services
 {
     public interface IFinancialService
     {
         OverviewState BuildMonth(int year, int month);
-        void AddStatement(OverviewStatement statement);
-        void MarkStatementPaid(int id);
+        Task AddStatement(OverviewStatement statement);
+        Task MarkStatementPaid(int id);
     }
 }
