@@ -52,8 +52,8 @@ namespace FinpeApi.Services
             return new OverviewState()
             {
                 MonthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month),
-                TotalIncome = 1000,
-                BankAmount = 100,
+                TotalIncome = GetIncome(year, month).Sum(x => x.Amount),
+                BankAmount = GetBankAmount(),
                 Year = year,
                 Categories = dbContext.Categories.Select(x => x.Name).ToList(),
                 Expenses = GetExpenses(year, month),
@@ -61,12 +61,34 @@ namespace FinpeApi.Services
             };
         }
 
-        private List<OverviewStatement> GetPendingStatements(int year, int month)
+        private decimal GetBankAmount()
+        {
+            decimal total = 0;
+
+            dbContext.Banks.ToList().ForEach(bank =>
+            {
+                total += dbContext.BankStatements
+                    .Where(x => x.Id == bank.Id)
+                    .OrderByDescending(x => x.ExecutionDate)
+                    .Last()
+                    .Amount;
+            });
+
+            return total;
+        }
+
+        private IQueryable<Statement> GetIncome(int year, int month)
         {
             return dbContext.Statements
-                .Where(x => x.DueDate.Year == year
-                    && x.DueDate.Month == month
-                    && !x.Paid)
+                .Where(x => x.DueDate.Year == year 
+                    && x.DueDate.Month == month 
+                    && x.Direction == StatementDirection.Income);
+        }
+
+        private List<OverviewStatement> GetPendingStatements(int year, int month)
+        {
+            return GetOutcome(year, month)
+                .Where(x => !x.Paid)
                 .Select(x => new OverviewStatement()
                 {
                     Category = x.Category.Name,
@@ -75,13 +97,13 @@ namespace FinpeApi.Services
                     DueDate = x.DueDate,
                     Id = x.Id
                 })
+                .OrderBy(x => x.DueDate)
                 .ToList();
         }
 
         private List<OverviewExpense> GetExpenses(int year, int month)
         {
-            return dbContext.Statements
-                .Where(x => x.DueDate.Year == year && x.DueDate.Month == month)
+            return GetOutcome(year, month)
                 .GroupBy(x => x.Category)
                 .Select(x => new OverviewExpense()
                 {
@@ -89,6 +111,14 @@ namespace FinpeApi.Services
                     Amount = x.Sum(values => values.Amount)
                 })
                 .ToList();
+        }
+
+        private IQueryable<Statement> GetOutcome(int year, int month)
+        {
+            return dbContext.Statements
+                .Where(x => x.DueDate.Year == year
+                    && x.DueDate.Month == month
+                    && x.Direction == StatementDirection.Outcome);
         }
 
         public async Task MarkStatementPaid(int id)
