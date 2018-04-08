@@ -82,10 +82,11 @@ namespace FinpeApi.Services
         {
             return dbContext.Statements
                 .Where(x => x.DueDate.Year == year && x.DueDate.Month == month)
+                .GroupBy(x => x.Category)
                 .Select(x => new OverviewExpense()
                 {
-                    Category = x.Category.Name,
-                    Amount = x.Amount
+                    Category = x.Key.Name,
+                    Amount = x.Sum(values => values.Amount)
                 })
                 .ToList();
         }
