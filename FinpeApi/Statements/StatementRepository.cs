@@ -30,7 +30,7 @@ namespace FinpeApi.Statements
             await dbContext.Statements.AddAsync(statement);
         }
 
-        private async Task<Category> GetCategory(string categoryName)
+        public async Task<Category> GetCategory(string categoryName)
         {
             var category = await dbContext.Categories.FirstOrDefaultAsync(x => x.Name == categoryName);
 

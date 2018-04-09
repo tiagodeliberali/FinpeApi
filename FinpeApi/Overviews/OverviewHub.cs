@@ -36,11 +36,13 @@ namespace FinpeApi.Overviews
 
         public async Task AddStatement(StatementDto statement)
         {
+            var category = await statementRepository.GetCategory(statement.Category);
+
             var dbStatement = Statement.CreateOutcome(
                 statement.Description,
                 statement.Amount,
                 statement.DueDate,
-                Category.Create(statement.Category));
+                category);
 
             await statementRepository.Save(dbStatement);
             await BuldOverview();

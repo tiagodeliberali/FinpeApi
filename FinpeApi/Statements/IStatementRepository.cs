@@ -6,5 +6,6 @@ namespace FinpeApi.Statements
     {
         Task<Statement> Get(int id);
         Task Save(Statement statement);
+        Task<Category> GetCategory(string categoryName);
     }
 }

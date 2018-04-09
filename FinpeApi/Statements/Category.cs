@@ -2,17 +2,17 @@
 {
     public class Category
     {
+        private int Id { get; set; }
+        public string Name { get; private set; }
+
         private Category() { }
 
-        public static Category Create(string name)
+        public static Category Create(string categoryName)
         {
             return new Category()
             {
-                Name = name
+                Name = categoryName
             };
         }
-
-        public int Id { get; set; }
-        public string Name { get; private set; }
     }
 }
