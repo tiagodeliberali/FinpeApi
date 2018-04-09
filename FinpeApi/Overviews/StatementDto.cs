@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace FinpeApi.Models.AppStates
+namespace FinpeApi.Overviews
 {
-    public class OverviewStatement
+    public class StatementDto
     {
         public int Id { get; set; }
         public DateTime DueDate { get; set; }

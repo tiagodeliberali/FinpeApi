@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace FinpeApi.Models.AppStates
+namespace FinpeApi.Overviews
 {
-    public class OverviewState
+    public class OverviewDto
     {
         public decimal TotalIncome { get; set; }
-        public List<OverviewExpense> Expenses { get; set; }
-        public List<OverviewStatement> PendingStatements { get; set; }
+        public List<ExpenseDto> Expenses { get; set; }
+        public List<StatementDto> PendingStatements { get; set; }
         public List<string> Categories { get; set; }
         public decimal BankAmount { get; set; }
         public string MonthName { get; set; }

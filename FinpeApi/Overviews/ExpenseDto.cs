@@ -1,6 +1,6 @@
-﻿namespace FinpeApi.Models.AppStates
+﻿namespace FinpeApi.Overviews
 {
-    public class OverviewExpense
+    public class ExpenseDto
     {
         public string Category { get; set; }
         public decimal Amount { get; set; }

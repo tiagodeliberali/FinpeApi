@@ -1,6 +1,7 @@
-﻿using FinpeApi.Hubs;
-using FinpeApi.Models;
+﻿using FinpeApi.Models;
+using FinpeApi.Overviews;
 using FinpeApi.Services;
+using FinpeApi.Statements;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ namespace FinpeApi
             services.AddDbContext<FinpeDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddTransient<IFinpeDbContext, FinpeDbContext>();
             services.AddTransient<IFinancialService, FinancialService>();
+            services.AddTransient<IStatementRepository, StatementRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors(options => 

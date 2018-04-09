@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using FinpeApi.Models;
-using FinpeApi.Models.AppStates;
-using Microsoft.EntityFrameworkCore;
+using FinpeApi.Overviews;
+using FinpeApi.Statements;
 
 namespace FinpeApi.Services
 {
@@ -15,41 +13,9 @@ namespace FinpeApi.Services
         
         public FinancialService(IFinpeDbContext dbContext) => this.dbContext = dbContext;
 
-        public async Task AddStatement(OverviewStatement statement)
+        public OverviewDto BuildMonth(int year, int month)
         {
-            var dbStatement = new Statement
-            {
-                Amount = statement.Amount,
-                Description = statement.Description,
-                DueDate = statement.DueDate,
-                Category = await GetCategory(statement.Category),
-                Paid = false
-            };
-
-            await dbContext.Statements.AddAsync(dbStatement);
-            await dbContext.SaveChangesAsync();
-        }
-
-        private async Task<Category> GetCategory(string categoryName)
-        {
-            var category = await dbContext.Categories.FirstOrDefaultAsync(x => x.Name == categoryName);
-
-            if (category == null)
-            {
-                category = new Category()
-                {
-                    Name = categoryName
-                };
-
-                await dbContext.Categories.AddAsync(category);
-            }
-
-            return category;
-        }
-
-        public OverviewState BuildMonth(int year, int month)
-        {
-            return new OverviewState()
+            return new OverviewDto()
             {
                 MonthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month),
                 TotalIncome = GetIncome(year, month).Sum(x => x.Amount),
@@ -85,11 +51,11 @@ namespace FinpeApi.Services
                     && x.Direction == StatementDirection.Income);
         }
 
-        private List<OverviewStatement> GetPendingStatements(int year, int month)
+        private List<StatementDto> GetPendingStatements(int year, int month)
         {
             return GetOutcome(year, month)
                 .Where(x => !x.Paid)
-                .Select(x => new OverviewStatement()
+                .Select(x => new StatementDto()
                 {
                     Category = x.Category.Name,
                     Amount = x.Amount,
@@ -101,11 +67,11 @@ namespace FinpeApi.Services
                 .ToList();
         }
 
-        private List<OverviewExpense> GetExpenses(int year, int month)
+        private List<ExpenseDto> GetExpenses(int year, int month)
         {
             return GetOutcome(year, month)
                 .GroupBy(x => x.Category)
-                .Select(x => new OverviewExpense()
+                .Select(x => new ExpenseDto()
                 {
                     Category = x.Key.Name,
                     Amount = x.Sum(values => values.Amount)
@@ -119,14 +85,6 @@ namespace FinpeApi.Services
                 .Where(x => x.DueDate.Year == year
                     && x.DueDate.Month == month
                     && x.Direction == StatementDirection.Outcome);
-        }
-
-        public async Task MarkStatementPaid(int id)
-        {
-            var statement = await dbContext.Statements.FindAsync(id);
-            statement.Paid = true;
-
-            await dbContext.SaveChangesAsync();
         }
     }
 }
