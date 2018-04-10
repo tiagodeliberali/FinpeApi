@@ -1,10 +1,10 @@
 ﻿using FinpeApi.Banks;
 using FinpeApi.Categories;
 using FinpeApi.Statements;
+using FinpeApi.Utils;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,14 +15,17 @@ namespace FinpeApi.Overviews
         private IStatementRepository statementRepository;
         private ICategoryRepository categoryRepository;
         private IBankRepository bankRepository;
+        private IDateService dateService;
 
         public OverviewHub(IStatementRepository statementRepository, 
             ICategoryRepository categoryRepository,
-            IBankRepository bankRepository)
+            IBankRepository bankRepository,
+            IDateService dateService)
         {
             this.statementRepository = statementRepository;
             this.categoryRepository = categoryRepository;
             this.bankRepository = bankRepository;
+            this.dateService = dateService;
         }
 
         public override async Task OnConnectedAsync()
@@ -62,28 +65,26 @@ namespace FinpeApi.Overviews
             await Clients.All.SendAsync(
                 "NewOverview", 
                 "FinpeApp", 
-                await BuildMonth(DateTime.Today.Year, DateTime.Today.Month));
+                await BuildMonth(dateService.GetCurrentMonthYear()));
         }
 
-        private async Task<OverviewDto> BuildMonth(int year, int month)
+        private async Task<OverviewDto> BuildMonth(MonthYear monthYear)
         {
-            IReadOnlyList<Statement> statements = await statementRepository.GetList(year, month);
+            IReadOnlyList<Statement> statements = await statementRepository.GetList(monthYear);
             IReadOnlyList<Category> categories = await categoryRepository.GetList();
             IReadOnlyList<Bank> banks = bankRepository.GetList();
 
             return new OverviewDto()
             {
-                MonthName = GetMonthName(month),
+                MonthName = monthYear.GetMonthName(),
                 TotalIncome = GetTotalIncome(statements),
                 BankAmount = GetBankAmount(banks),
-                Year = year,
+                Year = monthYear.Year,
                 Categories = GetCategories(categories),
                 Expenses = GetExpenses(statements),
                 PendingStatements = GetPendingStatements(statements)
             };
         }
-
-        private string GetMonthName(int month) => CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
 
         private decimal GetTotalIncome(IReadOnlyList<Statement> statements) => statements.Where(x => x.Direction == StatementDirection.Income).Sum(x => x.Amount);
 

@@ -3,6 +3,7 @@ using FinpeApi.Categories;
 using FinpeApi.Models;
 using FinpeApi.Overviews;
 using FinpeApi.Statements;
+using FinpeApi.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,7 @@ namespace FinpeApi
             services.AddTransient<IStatementRepository, StatementRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IBankRepository, BankRepository>();
+            services.AddTransient<IDateService, DateService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors(options => 

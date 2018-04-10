@@ -1,4 +1,5 @@
 ﻿using FinpeApi.Models;
+using FinpeApi.Utils;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,10 @@ namespace FinpeApi.Statements
 
         public async Task<Statement> Get(int id) => await dbContext.Statements.FindAsync(id);
 
-        public async Task<IReadOnlyList<Statement>> GetList(int year, int month) => await dbContext.Statements
+        public async Task<IReadOnlyList<Statement>> GetList(MonthYear monthYear) => await dbContext.Statements
                 .Include(x => x.Category)
                 .ToAsyncEnumerable()
-                .Where(x => x.DueDate.Year == year && x.DueDate.Month == month)
+                .Where(x => x.DueDate.Year == monthYear.Year && x.DueDate.Month == monthYear.Month)
                 .ToList();
 
         public async Task Save(Statement statement)
