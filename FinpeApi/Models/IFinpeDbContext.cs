@@ -1,4 +1,6 @@
-﻿using FinpeApi.Statements;
+﻿using FinpeApi.Banks;
+using FinpeApi.Categories;
+using FinpeApi.Statements;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
