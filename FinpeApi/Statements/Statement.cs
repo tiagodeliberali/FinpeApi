@@ -37,9 +37,14 @@ namespace FinpeApi.Statements
         public decimal Amount { get; private set; }
         public DateTime DueDate { get; private set; }
         public bool Paid { get; private set; }
+        public DateTime PaymentDate { get; private set; }
         public StatementDirection Direction { get; private set; }
         public Category Category { get; private set; }
 
-        public void MarkAsPaid() => Paid = true;
+        public void MarkAsPaid(DateTime paymentDate)
+        {
+            Paid = true;
+            PaymentDate = paymentDate;
+        }
     }
 }

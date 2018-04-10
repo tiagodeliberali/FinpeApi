@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FinpeApi.Banks
@@ -11,8 +12,25 @@ namespace FinpeApi.Banks
 
         private Bank() { }
 
-        public BankStatement GetLatestStatement() => BankStatements.Last();
+        public static Bank Create(int id, string name, IEnumerable<BankStatement> monthStatements)
+        {
+            if (id >= 0)
+                throw new ArgumentException("Must supply a bank with valid id", "id");
 
-        public void SetLatestStatement(BankStatement lastStatement) => BankStatements = new List<BankStatement> { lastStatement };
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Must supply a bank with valid name", "name");
+
+            if (monthStatements == null)
+                throw new ArgumentNullException("monthStatements");
+
+            return new Bank()
+            {
+                Id = id,
+                Name = name,
+                BankStatements = monthStatements.ToList()
+            };
+        }
+
+        public BankStatement GetLatestStatement() => BankStatements.Last();
     }
 }

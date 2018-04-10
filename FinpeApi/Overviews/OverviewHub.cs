@@ -5,7 +5,6 @@ using FinpeApi.Utils;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FinpeApi.Overviews
@@ -17,7 +16,7 @@ namespace FinpeApi.Overviews
         private IBankRepository bankRepository;
         private IDateService dateService;
 
-        public OverviewHub(IStatementRepository statementRepository, 
+        public OverviewHub(IStatementRepository statementRepository,
             ICategoryRepository categoryRepository,
             IBankRepository bankRepository,
             IDateService dateService)
@@ -41,7 +40,7 @@ namespace FinpeApi.Overviews
         public async Task MarkStatementPaid(int id)
         {
             Statement dbStatement = await statementRepository.Get(id);
-            dbStatement.MarkAsPaid();
+            dbStatement.MarkAsPaid(dateService.GetCurrentDateTime());
             await statementRepository.Save(dbStatement);
             await BroadcastOverview();
         }
@@ -63,58 +62,20 @@ namespace FinpeApi.Overviews
         private async Task BroadcastOverview()
         {
             await Clients.All.SendAsync(
-                "NewOverview", 
-                "FinpeApp", 
+                "NewOverview",
+                "FinpeApp",
                 await BuildMonth(dateService.GetCurrentMonthYear()));
         }
 
         private async Task<OverviewDto> BuildMonth(MonthYear monthYear)
         {
             IReadOnlyList<Statement> statements = await statementRepository.GetList(monthYear);
+            IReadOnlyList<Bank> banks = bankRepository.GetList(monthYear);
             IReadOnlyList<Category> categories = await categoryRepository.GetList();
-            IReadOnlyList<Bank> banks = bankRepository.GetList();
 
-            return new OverviewDto()
-            {
-                MonthName = monthYear.GetMonthName(),
-                TotalIncome = GetTotalIncome(statements),
-                BankAmount = GetBankAmount(banks),
-                Year = monthYear.Year,
-                Categories = GetCategories(categories),
-                Expenses = GetExpenses(statements),
-                PendingStatements = GetPendingStatements(statements)
-            };
+            MonthSummary summary = new MonthSummary(statements, banks);
+
+            return OverviewDto.Create(monthYear, summary, categories);
         }
-
-        private decimal GetTotalIncome(IReadOnlyList<Statement> statements) => statements.Where(x => x.Direction == StatementDirection.Income).Sum(x => x.Amount);
-
-        private decimal GetBankAmount(IReadOnlyList<Bank> banks) => banks.Sum(x => x.GetLatestStatement().Amount);
-
-        private IReadOnlyList<string> GetCategories(IReadOnlyList<Category> categories) => categories
-            .Select(x => x.Name)
-            .ToList();
-
-        private IReadOnlyList<StatementDto> GetPendingStatements(IReadOnlyList<Statement> statements) => statements
-            .Where(x => !x.Paid && x.Direction == StatementDirection.Outcome)
-            .Select(x => new StatementDto()
-            {
-                Category = x.Category.Name,
-                Amount = x.Amount,
-                Description = x.Description,
-                DueDate = x.DueDate,
-                Id = x.Id
-            })
-            .OrderBy(x => x.DueDate)
-            .ToList();
-
-        private IReadOnlyList<ExpenseDto> GetExpenses(IReadOnlyList<Statement> statements) => statements
-            .Where(x => x.Direction == StatementDirection.Outcome)
-            .GroupBy(x => x.Category)
-            .Select(x => new ExpenseDto()
-            {
-                Category = x.Key.Name,
-                Amount = x.Sum(values => values.Amount)
-            })
-            .ToList();
     }
 }

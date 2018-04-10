@@ -1,4 +1,5 @@
 ﻿using FinpeApi.Models;
+using FinpeApi.Utils;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,25 +11,18 @@ namespace FinpeApi.Banks
 
         public BankRepository(IFinpeDbContext dbContext) => this.dbContext = dbContext;
 
-        public IReadOnlyList<Bank> GetList()
+        public IReadOnlyList<Bank> GetList(MonthYear monthYear)
         {
             var bankStatements = dbContext.Banks
                 .Select(x => new
                 {
                     Bank = x,
-                    LastStatement = x.BankStatements.OrderBy(statement => statement.ExecutionDate).Last()
+                    MonthStatements = x.BankStatements
+                        .Where(statement => statement.ExecutionDate.Year == monthYear.Year && statement.ExecutionDate.Month == monthYear.Month)
+                        .OrderBy(statement => statement.ExecutionDate)
                 });
 
-            foreach (var item in bankStatements)
-            {
-                item.Bank.SetLatestStatement(item.LastStatement);
-            }
-
-            IReadOnlyList<Bank> banks = bankStatements
-                .Select(x => x.Bank)
-                .ToList();
-
-            return banks;
+            return bankStatements.Select(x => Bank.Create(x.Bank, x.MonthStatements)).ToList();
         }
     }
 }
