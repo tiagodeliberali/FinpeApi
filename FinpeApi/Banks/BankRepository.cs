@@ -12,10 +12,8 @@ namespace FinpeApi.Banks
 
         public BankRepository(IFinpeDbContext dbContext) => this.dbContext = dbContext;
 
-        public IReadOnlyList<Bank> GetList(MonthYear monthYear)
-        {
-            var bankStatements = dbContext.Banks.Include(x => x.BankStatements).ToList();
-            return bankStatements;
-        }
+        public IReadOnlyList<Bank> GetList() => dbContext.Banks
+            .Include(x => x.BankStatements)
+            .ToList();
     }
 }

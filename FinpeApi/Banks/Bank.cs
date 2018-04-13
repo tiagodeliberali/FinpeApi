@@ -13,22 +13,8 @@ namespace FinpeApi.Banks
 
         private Bank() { }
 
-        public static Bank Create(EntityId id, string name, IEnumerable<BankStatement> monthStatements)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Must supply a bank with valid name", "name");
-
-            if (monthStatements == null)
-                throw new ArgumentNullException("monthStatements");
-
-            return new Bank()
-            {
-                Id = id.Value,
-                Name = name,
-                BankStatements = monthStatements.ToList()
-            };
-        }
-
-        public BankStatement GetLatestStatement() => BankStatements.Last();
+        public BankStatement GetLatestStatement() => BankStatements
+            .OrderBy(x => x.ExecutionDate)
+            .Last();
     }
 }

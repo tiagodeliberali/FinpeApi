@@ -70,7 +70,7 @@ namespace FinpeApi.Overviews
         private async Task<OverviewDto> BuildMonth(MonthYear monthYear)
         {
             IReadOnlyList<Statement> statements = await statementRepository.GetList(monthYear);
-            IReadOnlyList<Bank> banks = bankRepository.GetList(monthYear);
+            IReadOnlyList<Bank> banks = bankRepository.GetList();
             IReadOnlyList<Category> categories = await categoryRepository.GetList();
 
             MonthSummary summary = new MonthSummary(statements, banks);

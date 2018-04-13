@@ -5,6 +5,6 @@ namespace FinpeApi.Banks
 {
     public interface IBankRepository
     {
-        IReadOnlyList<Bank> GetList(MonthYear monthYear);
+        IReadOnlyList<Bank> GetList();
     }
 }
