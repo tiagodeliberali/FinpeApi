@@ -71,7 +71,7 @@ namespace FinpeApi.Overviews
         {
             IReadOnlyList<Statement> statements = await statementRepository.GetList(monthYear);
             IReadOnlyList<Bank> banks = bankRepository.GetList();
-            IReadOnlyList<Category> categories = await categoryRepository.GetList();
+            IReadOnlyList<Category> categories = categoryRepository.GetList();
 
             MonthSummary summary = new MonthSummary(statements, banks);
 

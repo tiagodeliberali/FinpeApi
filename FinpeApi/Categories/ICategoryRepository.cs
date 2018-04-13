@@ -6,6 +6,6 @@ namespace FinpeApi.Categories
     public interface ICategoryRepository
     {
         Task<Category> Get(string name);
-        Task<IReadOnlyList<Category>> GetList();
+        IReadOnlyList<Category> GetList();
     }
 }

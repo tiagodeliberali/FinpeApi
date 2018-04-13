@@ -25,7 +25,7 @@ namespace FinpeApi.Categories
             return category;
         }
 
-        public async Task<IReadOnlyList<Category>> GetList() => 
-            await dbContext.Categories.ToAsyncEnumerable().OrderBy(x => x.Name).ToList();
+        public IReadOnlyList<Category> GetList() => 
+            dbContext.Categories.OrderBy(x => x.Name).ToList();
     }
 }
