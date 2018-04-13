@@ -1,13 +1,25 @@
-﻿using System;
+﻿using FinpeApi.Categories;
+using FinpeApi.Statements;
+using FinpeApi.Utils;
+using System;
 
 namespace FinpeApi.Overviews
 {
     public class StatementDto
     {
-        public int Id { get; set; }
-        public DateTime DueDate { get; set; }
-        public decimal Amount { get; set; }
-        public string Description { get; set; }
-        public string Category { get; set; }
+        public StatementDto(EntityId id, DateTime dueDate, StatementDescription description, MoneyAmount amount, Category category)
+        {
+            Id = id.Value;
+            DueDate = dueDate;
+            Description = description;
+            Amount = amount;
+            Category = category.Name;
+        }
+
+        public int Id { get; private set; }
+        public DateTime DueDate { get; private set; }
+        public decimal Amount { get; private set; }
+        public string Description { get; private set; }
+        public string Category { get; private set; }
     }
 }

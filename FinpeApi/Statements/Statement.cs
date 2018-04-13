@@ -7,17 +7,8 @@ namespace FinpeApi.Statements
     {
         private Statement() { }
 
-        public static Statement CreateOutcome(string description, decimal amount, DateTime dueDate, Category category)
+        public static Statement CreateOutcome(StatementDescription description, MoneyAmount amount, DateTime dueDate, Category category)
         {
-            if (string.IsNullOrEmpty(description))
-                throw new ArgumentException("Must supply a valid description", "description");
-
-            if (amount < 0)
-                throw new ArgumentException("Must supply a positive amount", "amount");
-
-            if (amount % 0.01m != 0)
-                throw new ArgumentException("Must supply an amount with max precision of 2 decimals", "amount");
-
             if (!category.Exists())
                 throw new ArgumentException("Cannot assign categories not present on database", "category");
 
@@ -33,18 +24,18 @@ namespace FinpeApi.Statements
         }
 
         public int Id { get; private set; }
-        public string Description { get; private set; }
-        public decimal Amount { get; private set; }
+        public StatementDescription Description { get; private set; }
+        public MoneyAmount Amount { get; private set; }
         public DateTime DueDate { get; private set; }
         public bool Paid { get; private set; }
-        public DateTime PaymentDate { get; private set; }
+        // public DateTime PaymentDate { get; private set; }
         public StatementDirection Direction { get; private set; }
         public Category Category { get; private set; }
 
         public void MarkAsPaid(DateTime paymentDate)
         {
             Paid = true;
-            PaymentDate = paymentDate;
+            // PaymentDate = paymentDate;
         }
     }
 }

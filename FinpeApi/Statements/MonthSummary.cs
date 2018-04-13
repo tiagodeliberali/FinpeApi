@@ -1,4 +1,5 @@
 ﻿using FinpeApi.Banks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,11 +12,11 @@ namespace FinpeApi.Statements
 
         public MonthSummary(IReadOnlyList<Statement> statements, IReadOnlyList<Bank> banks)
         {
-            this.statements = statements;
-            this.banks = banks;
+            this.statements = statements ?? throw new ArgumentNullException("statements");
+            this.banks = banks ?? throw new ArgumentNullException("banks");
         }
 
-        public decimal GetTotalIncome() => statements.Where(x => x.Direction == StatementDirection.Income).Sum(x => x.Amount);
+        public MoneyAmount GetTotalIncome() => statements.Where(x => x.Direction == StatementDirection.Income).Sum(x => x.Amount.Value);
 
         public IReadOnlyList<Statement> GetPendingStatements() => statements
             .Where(x => !x.Paid && x.Direction == StatementDirection.Outcome)
@@ -26,6 +27,6 @@ namespace FinpeApi.Statements
             .Where(x => x.Direction == StatementDirection.Outcome)
             .ToList();
 
-        public decimal GetCurrentBalance() => banks.Sum(x => x.GetLatestStatement().Amount);
+        public MoneyAmount GetCurrentBalance() => banks.Sum(x => x.GetLatestStatement().Amount);
     }
 }

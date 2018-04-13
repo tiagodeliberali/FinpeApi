@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FinpeApi.Categories;
 using FinpeApi.Statements;
@@ -25,9 +26,10 @@ namespace FinpeApi.Overviews
 
         private OverviewDto(MonthYear monthYear, MonthSummary summary, IReadOnlyList<Category> categories)
         {
-            this.monthYear = monthYear;
-            this.summary = summary;
-            this.categories = categories;
+            this.monthYear = monthYear ?? throw new ArgumentNullException("monthYear");
+            this.summary = summary ?? throw new ArgumentNullException("summary");
+            this.categories = categories ?? throw new ArgumentNullException("categories");
+
             BuildOverview();
         }
 
@@ -44,24 +46,13 @@ namespace FinpeApi.Overviews
 
         private IReadOnlyList<StatementDto> FormatPendingStatements() => summary
             .GetPendingStatements()
-            .Select(x => new StatementDto()
-            {
-                Category = x.Category.Name,
-                Amount = x.Amount,
-                Description = x.Description,
-                DueDate = x.DueDate,
-                Id = x.Id
-            })
+            .Select(x => new StatementDto(EntityId.Create(x.Id), x.DueDate, x.Description, x.Amount, x.Category))
             .ToList();
 
         private IReadOnlyList<ExpenseDto> FormatExpenses() => summary
             .GetExpenses()
             .GroupBy(x => x.Category)
-            .Select(x => new ExpenseDto()
-            {
-                Category = x.Key.Name,
-                Amount = x.Sum(values => values.Amount)
-            })
+            .Select(x => new ExpenseDto(x.Key, x.Sum(values => values.Amount.Value)))
             .ToList();
 
         private IReadOnlyList<string> GetCategories() => categories

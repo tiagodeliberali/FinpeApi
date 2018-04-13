@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FinpeApi.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,11 +13,8 @@ namespace FinpeApi.Banks
 
         private Bank() { }
 
-        public static Bank Create(int id, string name, IEnumerable<BankStatement> monthStatements)
+        public static Bank Create(EntityId id, string name, IEnumerable<BankStatement> monthStatements)
         {
-            if (id >= 0)
-                throw new ArgumentException("Must supply a bank with valid id", "id");
-
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Must supply a bank with valid name", "name");
 
@@ -25,7 +23,7 @@ namespace FinpeApi.Banks
 
             return new Bank()
             {
-                Id = id,
+                Id = id.Value,
                 Name = name,
                 BankStatements = monthStatements.ToList()
             };

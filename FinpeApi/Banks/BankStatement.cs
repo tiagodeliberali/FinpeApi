@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FinpeApi.Statements;
+using System;
 
 namespace FinpeApi.Banks
 {
@@ -7,6 +8,6 @@ namespace FinpeApi.Banks
         public int Id { get; private set; }
         public Bank Bank { get; private set; }
         public DateTime ExecutionDate { get; private set; }
-        public decimal Amount { get; private set; }
+        public MoneyAmount Amount { get; private set; }
     }
 }

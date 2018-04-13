@@ -1,8 +1,17 @@
-﻿namespace FinpeApi.Overviews
+﻿using FinpeApi.Categories;
+using FinpeApi.Statements;
+
+namespace FinpeApi.Overviews
 {
     public class ExpenseDto
     {
-        public string Category { get; set; }
-        public decimal Amount { get; set; }
+        public ExpenseDto(Category category, MoneyAmount amount)
+        {
+            this.Category = category.Name;
+            this.Amount = amount;
+        }
+
+        public string Category { get; private set; }
+        public decimal Amount { get; private set; }
     }
 }
