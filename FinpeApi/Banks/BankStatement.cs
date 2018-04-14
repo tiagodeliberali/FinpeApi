@@ -1,5 +1,4 @@
-﻿using FinpeApi.Statements;
-using FinpeApi.ValueObjects;
+﻿using FinpeApi.ValueObjects;
 using System;
 
 namespace FinpeApi.Banks

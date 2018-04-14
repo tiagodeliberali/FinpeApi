@@ -7,5 +7,6 @@ namespace FinpeApi.Categories
     {
         Task<Category> Get(string name);
         IReadOnlyList<Category> GetList();
+        Task Save(Category category);
     }
 }

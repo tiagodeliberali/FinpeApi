@@ -12,17 +12,15 @@ namespace FinpeApi.Categories
 
         public CategoryRepository(IFinpeDbContext dbContext) => this.dbContext = dbContext;
 
-        public async Task<Category> Get(string name)
+        public async Task<Category> Get(string name) => 
+            await dbContext.Categories.FirstOrDefaultAsync(x => x.Name == name);
+
+        public async Task Save(Category category)
         {
-            var category = await dbContext.Categories.FirstOrDefaultAsync(x => x.Name == name);
-
-            if (category == null)
-            {
-                category = Category.Create(name);
+            if (category.Id == 0)
                 await dbContext.Categories.AddAsync(category);
-            }
 
-            return category;
+            await dbContext.SaveChangesAsync();
         }
 
         public IReadOnlyList<Category> GetList() => 

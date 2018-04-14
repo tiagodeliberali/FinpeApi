@@ -49,6 +49,11 @@ namespace FinpeApi.Overviews
         public async Task AddStatement(StatementDto statement)
         {
             var category = await categoryRepository.Get(statement.Category);
+            if (category == null)
+            {
+                category = Category.Create(statement.Category);
+                await categoryRepository.Save(category);
+            }
 
             var dbStatement = Statement.CreateOutcome(
                 statement.Description,

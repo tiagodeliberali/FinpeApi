@@ -1,5 +1,4 @@
-﻿using FinpeApi.Utils;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace FinpeApi.Banks
 {

@@ -1,5 +1,4 @@
 ﻿using FinpeApi.Models;
-using FinpeApi.Utils;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
