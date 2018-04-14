@@ -1,7 +1,7 @@
 ﻿using FinpeApi.Banks;
 using FinpeApi.Categories;
 using FinpeApi.Statements;
-using FinpeApi.Utils;
+using FinpeApi.ValueObjects;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

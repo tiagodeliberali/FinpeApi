@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Globalization;
 
-namespace FinpeApi.Utils
+namespace FinpeApi.ValueObjects
 {
     public class MonthYear
     {

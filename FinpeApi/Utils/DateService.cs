@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FinpeApi.ValueObjects;
+using System;
 
 namespace FinpeApi.Utils
 {

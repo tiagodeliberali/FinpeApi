@@ -1,4 +1,5 @@
 ﻿using FinpeApi.Banks;
+using FinpeApi.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

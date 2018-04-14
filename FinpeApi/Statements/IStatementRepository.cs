@@ -1,4 +1,4 @@
-﻿using FinpeApi.Utils;
+﻿using FinpeApi.ValueObjects;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -1,4 +1,5 @@
 ﻿using FinpeApi.Categories;
+using FinpeApi.ValueObjects;
 using System;
 
 namespace FinpeApi.Statements

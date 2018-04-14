@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FinpeApi.Categories;
 using FinpeApi.Statements;
-using FinpeApi.Utils;
+using FinpeApi.ValueObjects;
 
 namespace FinpeApi.Overviews
 {

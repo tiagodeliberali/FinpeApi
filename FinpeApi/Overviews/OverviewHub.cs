@@ -2,6 +2,7 @@
 using FinpeApi.Categories;
 using FinpeApi.Statements;
 using FinpeApi.Utils;
+using FinpeApi.ValueObjects;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;

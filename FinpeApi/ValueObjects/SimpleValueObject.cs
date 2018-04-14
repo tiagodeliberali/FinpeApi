@@ -1,4 +1,4 @@
-﻿namespace FinpeApi.Utils
+namespace FinpeApi.ValueObjects
 {
     public interface IValueObject<T>
     {

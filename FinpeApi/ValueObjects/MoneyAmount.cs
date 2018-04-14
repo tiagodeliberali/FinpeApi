@@ -1,7 +1,7 @@
-﻿using FinpeApi.Utils;
+using FinpeApi.Utils;
 using System;
 
-namespace FinpeApi.Statements
+namespace FinpeApi.ValueObjects
 {
     public class MoneyAmount : SimpleValueObject<decimal, MoneyAmount>
     {

@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace FinpeApi.Utils
+namespace FinpeApi.ValueObjects
 {
     public class EntityId : SimpleValueObject<int, EntityId>
     {
