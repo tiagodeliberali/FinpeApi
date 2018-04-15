@@ -45,7 +45,7 @@ namespace FinpeApi.Overviews
         }
 
         private IReadOnlyList<StatementDto> FormatPendingStatements() => summary
-            .GetPendingStatements()
+            .GetPendingExpenses()
             .Select(x => new StatementDto(EntityId.Create(x.Id), x.DueDate, x.Description, x.Amount, x.Category))
             .ToList();
 

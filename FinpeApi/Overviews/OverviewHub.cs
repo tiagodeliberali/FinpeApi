@@ -43,6 +43,7 @@ namespace FinpeApi.Overviews
             Statement dbStatement = await statementRepository.Get(id);
             dbStatement.MarkAsPaid(dateService.GetCurrentDateTime());
             await statementRepository.Save(dbStatement);
+
             await BroadcastOverview();
         }
 

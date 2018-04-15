@@ -19,7 +19,7 @@ namespace FinpeApi.Statements
 
         public MoneyAmount GetTotalIncome() => statements.Where(x => x.Direction == StatementDirection.Income).Sum(x => x.Amount.Value);
 
-        public IReadOnlyList<Statement> GetPendingStatements() => statements
+        public IReadOnlyList<Statement> GetPendingExpenses() => statements
             .Where(x => !x.Paid && x.Direction == StatementDirection.Outcome)
             .OrderBy(x => x.DueDate)
             .ToList();
@@ -28,6 +28,17 @@ namespace FinpeApi.Statements
             .Where(x => x.Direction == StatementDirection.Outcome)
             .ToList();
 
-        public MoneyAmount GetCurrentBalance() => banks.Sum(x => x.GetLatestStatement().Amount);
+        public MoneyAmount GetCurrentBalance()
+        {
+            DateTime latestDate = banks.First().GetLatestStatement().ExecutionDate;
+
+            decimal bankBalance = banks.Sum(x => x.GetLatestStatement().Amount);
+
+            decimal outcomePaidBalance = statements
+                .Where(x => x.Paid && x.Direction == StatementDirection.Outcome && x.PaymentDate > latestDate)
+                .Sum(x => x.Amount);
+
+            return bankBalance - outcomePaidBalance;
+        }
     }
 }

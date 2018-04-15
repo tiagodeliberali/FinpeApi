@@ -1,4 +1,3 @@
-using FinpeApi.Utils;
 using System;
 
 namespace FinpeApi.ValueObjects
@@ -7,9 +6,6 @@ namespace FinpeApi.ValueObjects
     {
         public static MoneyAmount Create(decimal value)
         {
-            if (value < 0)
-                throw new ArgumentException("Must supply a positive amount", "value");
-
             if (value % 0.01m != 0)
                 throw new ArgumentException("Must supply an amount with max precision of 2 decimals", "value");
 
