@@ -38,5 +38,7 @@ namespace FinpeApi.Statements
             Paid = true;
             PaymentDate = paymentDate;
         }
-    }
+
+        public void UpdateAmount(MoneyAmount amount) => this.Amount = amount;
+  }
 }

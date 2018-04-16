@@ -47,6 +47,15 @@ namespace FinpeApi.Overviews
             await BroadcastOverview();
         }
 
+        public async Task UpdateAmount(int id, decimal amount)
+        {
+            Statement dbStatement = await statementRepository.Get(id);
+            dbStatement.UpdateAmount(MoneyAmount.Create(amount));
+            await statementRepository.Save(dbStatement);
+
+            await BroadcastOverview();
+        }
+
         public async Task AddStatement(StatementDto statement)
         {
             var category = await categoryRepository.Get(statement.Category);
