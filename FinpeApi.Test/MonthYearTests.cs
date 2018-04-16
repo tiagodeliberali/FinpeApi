@@ -10,7 +10,7 @@ namespace FinpeApi.Test
         public void ShouldReturnMonthName()
         {
             // Arrange
-            string[] possibleNames = new string[] { "janeiro", "january" };
+            string[] possibleNames = new string[] { "janeiro", "january", "January" };
             var monthYear = MonthYear.Create(2018, 1);
 
             // Act

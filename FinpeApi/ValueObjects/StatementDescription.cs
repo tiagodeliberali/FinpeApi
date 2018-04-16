@@ -21,7 +21,7 @@ namespace FinpeApi.ValueObjects
 
         public static implicit operator StatementDescription(string value)
         {
-            return StatementDescription.Create(value);
+            return Create(value);
         }
     }
 }

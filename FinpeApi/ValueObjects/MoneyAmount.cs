@@ -21,7 +21,7 @@ namespace FinpeApi.ValueObjects
 
         public static implicit operator MoneyAmount(decimal value)
         {
-            return MoneyAmount.Create(value);
+            return Create(value);
         }
     }
 }
