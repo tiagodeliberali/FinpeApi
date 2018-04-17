@@ -1,18 +1,16 @@
-﻿using FinpeApi.Categories;
-using FinpeApi.ValueObjects;
-using System;
+﻿using System;
 
 namespace FinpeApi.Overviews
 {
     public class StatementDto
     {
-        public StatementDto(EntityId id, DateTime dueDate, StatementDescription description, MoneyAmount amount, Category category)
+        public StatementDto(int id, DateTime dueDate, string description, decimal amount, string category)
         {
-            Id = id.Value;
+            Id = id;
             DueDate = dueDate;
             Description = description;
             Amount = amount;
-            Category = category.Name;
+            Category = category;
         }
 
         public int Id { get; private set; }

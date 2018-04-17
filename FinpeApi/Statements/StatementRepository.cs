@@ -13,7 +13,7 @@ namespace FinpeApi.Statements
 
         public StatementRepository(IFinpeDbContext dbContext) => this.dbContext = dbContext;
 
-        public async Task<Statement> Get(int id) => await dbContext.Statements.FindAsync(id);
+        public async Task<Statement> Get(int id) => await dbContext.Statements.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
 
         public async Task<IReadOnlyList<Statement>> GetList(MonthYear monthYear) => await dbContext.Statements
                 .Include(x => x.Category)
@@ -23,6 +23,8 @@ namespace FinpeApi.Statements
 
         public async Task Save(Statement statement)
         {
+            dbContext.Categories.Attach(statement.Category);
+
             if (statement.Id == 0)
                 await dbContext.Statements.AddAsync(statement);
 
