@@ -25,11 +25,12 @@ namespace FinpeApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<FinpeDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddTransient<IFinpeDbContext, FinpeDbContext>();
-            services.AddTransient<IStatementRepository, StatementRepository>();
-            services.AddTransient<ICategoryRepository, CategoryRepository>();
-            services.AddTransient<IBankRepository, BankRepository>();
+            services.AddTransient<FinpeDbContext, FinpeDbContext>();
+            services.AddTransient<StatementRepository, StatementRepository>();
+            services.AddTransient<CategoryRepository, CategoryRepository>();
+            services.AddTransient<BankRepository, BankRepository>();
             services.AddTransient<IDateService, DateService>();
+            services.AddTransient<StatementController, StatementController>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors(options => 

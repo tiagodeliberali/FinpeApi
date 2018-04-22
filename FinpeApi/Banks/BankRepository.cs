@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace FinpeApi.Banks
 {
-    public class BankRepository : IBankRepository
+    public class BankRepository
     {
-        private IFinpeDbContext dbContext;
+        private FinpeDbContext dbContext;
 
-        public BankRepository(IFinpeDbContext dbContext) => this.dbContext = dbContext;
+        public BankRepository(FinpeDbContext dbContext) => this.dbContext = dbContext;
 
         public IReadOnlyList<Bank> GetList() => dbContext.Banks
             .Include(x => x.BankStatements)

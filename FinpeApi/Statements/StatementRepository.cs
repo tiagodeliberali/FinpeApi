@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace FinpeApi.Statements
 {
-    public class StatementRepository : IStatementRepository
+    public class StatementRepository
     {
-        private IFinpeDbContext dbContext;
+        private FinpeDbContext dbContext;
 
-        public StatementRepository(IFinpeDbContext dbContext) => this.dbContext = dbContext;
+        public StatementRepository(FinpeDbContext dbContext) => this.dbContext = dbContext;
 
         public async Task<Statement> Get(int id) => await dbContext.Statements.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
 

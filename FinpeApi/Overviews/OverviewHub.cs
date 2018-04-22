@@ -12,20 +12,11 @@ namespace FinpeApi.Overviews
 {
     public class OverviewHub : Hub
     {
-        private IStatementRepository statementRepository;
-        private ICategoryRepository categoryRepository;
-        private IBankRepository bankRepository;
-        private IDateService dateService;
+        private StatementController statementController;
 
-        public OverviewHub(IStatementRepository statementRepository,
-            ICategoryRepository categoryRepository,
-            IBankRepository bankRepository,
-            IDateService dateService)
+        public OverviewHub(StatementController statementController)
         {
-            this.statementRepository = statementRepository;
-            this.categoryRepository = categoryRepository;
-            this.bankRepository = bankRepository;
-            this.dateService = dateService;
+            this.statementController = statementController;
         }
 
         public override async Task OnConnectedAsync()
@@ -40,38 +31,19 @@ namespace FinpeApi.Overviews
 
         public async Task MarkStatementPaid(int id)
         {
-            Statement dbStatement = await statementRepository.Get(id);
-            dbStatement.MarkAsPaid(dateService.GetCurrentDateTime());
-            await statementRepository.Save(dbStatement);
-
+            await statementController.MarkStatementPaid(id);
             await BroadcastOverview();
         }
 
         public async Task UpdateAmount(int id, decimal amount)
         {
-            Statement dbStatement = await statementRepository.Get(id);
-            dbStatement.UpdateAmount(MoneyAmount.Create(amount));
-            await statementRepository.Save(dbStatement);
-
+            await statementController.UpdateAmount(id, amount);
             await BroadcastOverview();
         }
 
         public async Task AddStatement(StatementDto statement)
         {
-            var category = await categoryRepository.Get(statement.Category);
-            if (category == null)
-            {
-                category = Category.Create(statement.Category);
-                await categoryRepository.Save(category);
-            }
-
-            var dbStatement = Statement.CreateOutcome(
-                statement.Description,
-                statement.Amount,
-                statement.DueDate,
-                category);
-
-            await statementRepository.Save(dbStatement);
+            await statementController.AddStatement(statement);
             await BroadcastOverview();
         }
 
@@ -80,18 +52,7 @@ namespace FinpeApi.Overviews
             await Clients.All.SendAsync(
                 "NewOverview",
                 "FinpeApp",
-                await BuildMonth(dateService.GetCurrentMonthYear()));
-        }
-
-        private async Task<OverviewDto> BuildMonth(MonthYear monthYear)
-        {
-            IReadOnlyList<Statement> statements = await statementRepository.GetList(monthYear);
-            IReadOnlyList<Bank> banks = bankRepository.GetList();
-            IReadOnlyList<Category> categories = categoryRepository.GetList();
-
-            MonthSummary summary = new MonthSummary(statements, banks);
-
-            return OverviewDto.Create(monthYear, summary, categories);
+                await statementController.BuildCurrentMonth());
         }
     }
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace FinpeApi.Categories
 {
-    public class CategoryRepository : ICategoryRepository
+    public class CategoryRepository
     {
-        private IFinpeDbContext dbContext;
+        private FinpeDbContext dbContext;
 
-        public CategoryRepository(IFinpeDbContext dbContext) => this.dbContext = dbContext;
+        public CategoryRepository(FinpeDbContext dbContext) => this.dbContext = dbContext;
 
         public async Task<Category> Get(string name) => 
             await dbContext.Categories.FirstOrDefaultAsync(x => x.Name == name);
