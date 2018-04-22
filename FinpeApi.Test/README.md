@@ -1,3 +1,3 @@
-﻿docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=P24d!dBX!qRf" `
-   -p 1433:1433 --name sql1 `
-   -d microsoft/mssql-server-linux:2017-latest
+﻿# Before run tests
+
+Run `docker-compose up` to start database container used by integration tests

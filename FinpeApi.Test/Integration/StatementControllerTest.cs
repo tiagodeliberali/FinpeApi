@@ -18,7 +18,7 @@ namespace FinpeApi.Test.Integration
     {
         private FinpeDbContext db;
         private DbUtils dbUtils;
-        private const string connectionString = "Server=tcp:10.0.75.1,1433;Initial Catalog=finpedb;Persist Security Info=False;User ID=SA;Password=P24d!dBX!qRf;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;";
+        private const string connectionString = "Server=tcp:localhost,1433;Initial Catalog=finpedb;Persist Security Info=False;User ID=SA;Password=P24d!dBX!qRf;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;";
 
         public StatementControllerTest()
         {
