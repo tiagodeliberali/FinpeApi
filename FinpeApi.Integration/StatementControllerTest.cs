@@ -2,7 +2,7 @@
 using FinpeApi.Categories;
 using FinpeApi.Models;
 using FinpeApi.Statements;
-using FinpeApi.Test.Integration.DatabaseDTOs;
+using FinpeApi.Integration.DatabaseDTOs;
 using FinpeApi.Utils;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -12,13 +12,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FinpeApi.Test.Integration
+namespace FinpeApi.Integration
 {
     public class StatementControllerTest
     {
         private FinpeDbContext db;
         private DbUtils dbUtils;
-        private const string connectionString = "Server=tcp:localhost,1433;Initial Catalog=finpedb;Persist Security Info=False;User ID=SA;Password=P24d!dBX!qRf;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;";
+        private const string connectionString = "Server=tcp:database,1433;Initial Catalog=finpedb;Persist Security Info=False;User ID=SA;Password=P24d!dBX!qRf;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;";
 
         public StatementControllerTest()
         {

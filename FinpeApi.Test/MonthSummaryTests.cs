@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace FinpeApi.Test.Unit
+namespace FinpeApi.Test
 {
     public class MonthSummaryTests
     {

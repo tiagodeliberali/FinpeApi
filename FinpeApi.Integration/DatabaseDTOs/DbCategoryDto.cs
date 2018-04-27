@@ -1,4 +1,4 @@
-﻿namespace FinpeApi.Test.Integration.DatabaseDTOs
+﻿namespace FinpeApi.Integration.DatabaseDTOs
 {
     public class DbCategoryDto: DbEntity
     {

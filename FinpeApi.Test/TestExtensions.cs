@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinpeApi.Test.Unit
+namespace FinpeApi.Test
 {
     public static class TestExtensions
     {

@@ -4,7 +4,7 @@ using FinpeApi.ValueObjects;
 using System;
 using Xunit;
 
-namespace FinpeApi.Test.Unit
+namespace FinpeApi.Test
 {
     public class StatementTests
     {

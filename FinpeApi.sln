@@ -7,6 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinpeApi", "FinpeApi\FinpeA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinpeApi.Test", "FinpeApi.Test\FinpeApi.Test.csproj", "{BA4EC534-145E-4DA2-A2D5-B43404FF6381}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ABA6881B-5E5A-423D-A541-A65A6EB540E2}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		.drone.yml = .drone.yml
+		.gitignore = .gitignore
+		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinpeApi.Integration", "FinpeApi.Integration\FinpeApi.Integration.csproj", "{2CE28A7A-F743-4ECA-9195-49910F25626F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +32,10 @@ Global
 		{BA4EC534-145E-4DA2-A2D5-B43404FF6381}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA4EC534-145E-4DA2-A2D5-B43404FF6381}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA4EC534-145E-4DA2-A2D5-B43404FF6381}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CE28A7A-F743-4ECA-9195-49910F25626F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CE28A7A-F743-4ECA-9195-49910F25626F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CE28A7A-F743-4ECA-9195-49910F25626F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CE28A7A-F743-4ECA-9195-49910F25626F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

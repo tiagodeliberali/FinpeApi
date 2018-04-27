@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinpeApi.Test.Integration.DatabaseDTOs
+namespace FinpeApi.Integration.DatabaseDTOs
 {
     public class DbStatementDto: DbEntity
     {

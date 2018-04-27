@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 
-namespace FinpeApi.Test.Integration.DatabaseDTOs
+namespace FinpeApi.Integration.DatabaseDTOs
 {
     public class DbUtils
     {
