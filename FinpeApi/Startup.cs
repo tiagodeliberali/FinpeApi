@@ -36,9 +36,10 @@ namespace FinpeApi
             services.AddCors(options => 
                 options.AddPolicy("CorsPolicy", builder => {
                     builder
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowAnyOrigin();
+                        .WithOrigins("http://localhost:8080", "https://finpe-app.firebaseapp.com")
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                        .AllowAnyHeader();
                 }));
             services.AddSignalR();
         }
