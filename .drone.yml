@@ -1,0 +1,34 @@
+pipeline:
+    restore:
+        image: microsoft/dotnet:2.1.300-preview2-sdk
+        commands:
+            - dotnet restore FinpeApi/FinpeApi.csproj
+            - dotnet restore FinpeApi.Test/FinpeApi.Test.csproj
+            - dotnet restore FinpeApi.Integration/FinpeApi.Integration.csproj
+    compile:
+        image: microsoft/dotnet:2.1.300-preview2-sdk
+        commands:
+            - dotnet build FinpeApi/FinpeApi.csproj
+            - dotnet build FinpeApi.Test/FinpeApi.Test.csproj
+            - dotnet build FinpeApi.Integration/FinpeApi.Integration.csproj
+    unit-test:
+        image: microsoft/dotnet:2.1.300-preview2-sdk
+        commands:
+            - dotnet test FinpeApi.Test/FinpeApi.Test.csproj
+    integration-test:
+        image: microsoft/dotnet:2.1.300-preview2-sdk
+        commands:
+            - dotnet test FinpeApi.Integration/FinpeApi.Integration.csproj
+    publish:
+        image: plugins/docker
+        repo: tiagodeliberali/finpeapi
+        tags: latest
+        secrets: [ docker_username, docker_password ]
+
+services:
+    database:
+        image: microsoft/mssql-server-linux:latest
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=P24d!dBX!qRf
+            - MSSQL_PID=Express
