@@ -4,14 +4,7 @@
     {
         public string Name { get; set; }
 
-        public override string GetInsert()
-        {
-            return "INSERT INTO finpedb.dbo.Banks (Name) VALUES(@Name);";
-        }
-
-        public override string GetName()
-        {
-            return "finpedb.dbo.Banks";
-        }
+        public override string GetInsert() => "INSERT INTO finpedb.dbo.Banks (Name) VALUES(@Name);";
+        public override string GetName() => "finpedb.dbo.Banks";
     }
 }

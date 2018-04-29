@@ -8,14 +8,7 @@ namespace FinpeApi.Integration.DatabaseDTOs
         public DateTime ExecutionDate { get; set; }
         public decimal Amount { get; set; }
 
-        public override string GetInsert()
-        {
-            return "INSERT INTO finpedb.dbo.BankStatements (ExecutionDate, Amount, BankId) VALUES(@ExecutionDate, @Amount, @BankId);";
-        }
-
-        public override string GetName()
-        {
-            return "finpedb.dbo.BankStatements";
-        }
+        public override string GetInsert() => "INSERT INTO finpedb.dbo.BankStatements (ExecutionDate, Amount, BankId) VALUES(@ExecutionDate, @Amount, @BankId);";
+        public override string GetName() => "finpedb.dbo.BankStatements";
     }
 }
