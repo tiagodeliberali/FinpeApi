@@ -9,8 +9,13 @@ namespace FinpeApi.Integration.DatabaseDTOs
     {
         private SqlConnection connection;
 
-        public DbUtils(SqlConnection connection)
+        public static string GetConnectionString() => 
+            "Server=tcp:database,1433;Initial Catalog=finpedb;Persist Security Info=False;User ID=SA;Password=P24d!dBX!qRf;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;";
+
+        public DbUtils()
         {
+            SqlConnection connection = new SqlConnection(DbUtils.GetConnectionString());
+            connection.Open();
             this.connection = connection;
         }
 

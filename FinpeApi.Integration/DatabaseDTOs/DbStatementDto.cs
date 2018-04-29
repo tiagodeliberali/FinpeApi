@@ -4,7 +4,6 @@ namespace FinpeApi.Integration.DatabaseDTOs
 {
     public class DbStatementDto: DbEntity
     {
-        
         public string Description { get; set; }
         public decimal Amount { get; set; }
         public DateTime DueDate { get; set; }

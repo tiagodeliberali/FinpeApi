@@ -7,7 +7,6 @@ using FinpeApi.Utils;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -18,24 +17,11 @@ namespace FinpeApi.Integration
     {
         private FinpeDbContext db;
         private DbUtils dbUtils;
-        private const string connectionString = "Server=tcp:database,1433;Initial Catalog=finpedb;Persist Security Info=False;User ID=SA;Password=P24d!dBX!qRf;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;";
 
         public StatementControllerTest()
         {
-            db = BuildDbContext();
-            db.Database.Migrate();
-
-            SqlConnection connection = new SqlConnection(connectionString);
-            connection.Open();
-            dbUtils = new DbUtils(connection);
-        }
-
-        private static FinpeDbContext BuildDbContext()
-        {
-            DbContextOptionsBuilder contextBuidler = new DbContextOptionsBuilder();
-            contextBuidler.UseSqlServer(connectionString);
-            FinpeDbContext db = new FinpeDbContext(contextBuidler.Options);
-            return db;
+            SetDbContext();
+            dbUtils = new DbUtils();
         }
 
         [Fact]
@@ -115,6 +101,19 @@ namespace FinpeApi.Integration
             Assert.Equal(dto.Description, statement.Description);
             Assert.Equal(dto.DueDate, statement.DueDate);
             Assert.Equal(category.Id, statement.CategoryId);
+        }
+
+        private void SetDbContext()
+        {
+            if (db == null)
+            {
+                DbContextOptionsBuilder contextBuidler = new DbContextOptionsBuilder();
+                contextBuidler.UseSqlServer(DbUtils.GetConnectionString());
+                FinpeDbContext dbContext = new FinpeDbContext(contextBuidler.Options);
+                dbContext.Database.Migrate();
+
+                db = dbContext;
+            }
         }
 
         private  StatementController BuildStatementController(DateTime? dateTime = null)
