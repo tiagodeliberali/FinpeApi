@@ -47,6 +47,12 @@ namespace FinpeApi.Overviews
             await BroadcastOverview();
         }
 
+        public async Task UpdateBalance(decimal amount)
+        {
+            await statementController.UpdateBalance(amount);
+            await BroadcastOverview();
+        }
+
         private async Task BroadcastOverview()
         {
             await Clients.All.SendAsync(

@@ -45,12 +45,7 @@ namespace FinpeApi.Integration
             int statementId = AddSingleStatement();
             DateTime currentDateTime = DateTime.Parse("2018-04-21");
             
-            var sut = new StatementController(
-                new StatementRepository(db),
-                new CategoryRepository(db),
-                new BankRepository(db),
-                MockDateService(currentDateTime)
-            );
+            var sut = BuildStatementController(currentDateTime);
 
             // Act
             await sut.MarkStatementPaid(statementId);
@@ -67,12 +62,7 @@ namespace FinpeApi.Integration
             // Arrange
             int statementId = AddSingleStatement();
             
-            var sut = new StatementController(
-                new StatementRepository(db),
-                new CategoryRepository(db),
-                new BankRepository(db),
-                new Mock<IDateService>().Object
-            );
+            var sut = BuildStatementController();
 
             // Act
             decimal amount = 150.53m;
@@ -84,18 +74,33 @@ namespace FinpeApi.Integration
         }
 
         [Fact]
+        public async Task UpdateBalance()
+        {
+            // Arrange
+            int bankId = AddSingleBank();
+            DateTime currentDateTime = DateTime.Parse("2018-04-28");
+
+            var sut = BuildStatementController(currentDateTime);
+
+            // Act
+            decimal amount = 220.56m;
+            await sut.UpdateBalance(amount);
+
+            // Assert
+            var statement = dbUtils.GetAll<DbBankStatementDto>().Single();
+            Assert.Equal(bankId, statement.BankId);
+            Assert.Equal(amount, statement.Amount);
+            Assert.Equal(currentDateTime, statement.ExecutionDate);
+        }
+
+        [Fact]
         public async Task AddStatement()
         {
             // Arrange
             CleanAll();
             DateTime currentDateTime = DateTime.Parse("2018-04-21");
 
-            var sut = new StatementController(
-                new StatementRepository(db),
-                new CategoryRepository(db),
-                new BankRepository(db),
-                new Mock<IDateService>().Object
-            );
+            var sut = BuildStatementController();
 
             // Act
             StatementDto dto = new StatementDto(0, currentDateTime, "test description dto", 200, "new dto category");
@@ -110,6 +115,15 @@ namespace FinpeApi.Integration
             Assert.Equal(dto.Description, statement.Description);
             Assert.Equal(dto.DueDate, statement.DueDate);
             Assert.Equal(category.Id, statement.CategoryId);
+        }
+
+        private  StatementController BuildStatementController(DateTime? dateTime = null)
+        {
+            return new StatementController(
+                new StatementRepository(db),
+                new CategoryRepository(db),
+                new BankRepository(db),
+                MockDateService(dateTime));
         }
 
         private int AddSingleStatement()
@@ -136,16 +150,33 @@ namespace FinpeApi.Integration
             return statement.Id;
         }
 
+        private int AddSingleBank()
+        {
+            CleanAll();
+
+            DbBankDto bank = new DbBankDto()
+            {
+                Name = "Test bank"
+            };
+            dbUtils.Insert(bank);
+
+            return bank.Id;
+        }
+
         private void CleanAll()
         {
             dbUtils.DeteleAll<DbStatementDto>();
             dbUtils.DeteleAll<DbCategoryDto>();
+            dbUtils.DeteleAll<DbBankStatementDto>();
+            dbUtils.DeteleAll<DbBankDto>();
         }
 
-        private static IDateService MockDateService(DateTime currentDateTime)
+        private static IDateService MockDateService(DateTime? currentDateTime)
         {
             Mock<IDateService> dateServiceMock = new Mock<IDateService>();
-            dateServiceMock.Setup(x => x.GetCurrentDateTime()).Returns(currentDateTime);
+
+            if (currentDateTime.HasValue)
+                dateServiceMock.Setup(x => x.GetCurrentDateTime()).Returns(currentDateTime.Value);
 
             return dateServiceMock.Object;
         }

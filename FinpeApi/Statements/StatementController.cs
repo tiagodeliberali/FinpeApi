@@ -3,7 +3,9 @@ using FinpeApi.Categories;
 using FinpeApi.Overviews;
 using FinpeApi.Utils;
 using FinpeApi.ValueObjects;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FinpeApi.Statements
@@ -56,6 +58,14 @@ namespace FinpeApi.Statements
                 category);
 
             await statementRepository.Save(dbStatement);
+        }
+
+        public async Task UpdateBalance(decimal amount)
+        {
+            var bank = bankRepository.GetList().First();
+            var statement = bank.NewBankStatement(amount, dateService.GetCurrentDateTime());
+
+            await bankRepository.SaveStatement(statement);
         }
 
         public async Task<OverviewDto> BuildCurrentMonth()

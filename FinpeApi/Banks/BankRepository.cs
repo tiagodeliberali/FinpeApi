@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FinpeApi.Banks
 {
@@ -14,5 +15,11 @@ namespace FinpeApi.Banks
         public IReadOnlyList<Bank> GetList() => dbContext.Banks
             .Include(x => x.BankStatements)
             .ToList();
+
+        public async Task SaveStatement(BankStatement statement)
+        {
+            dbContext.BankStatements.Add(statement);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

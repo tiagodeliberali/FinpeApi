@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FinpeApi.Banks
@@ -12,5 +13,10 @@ namespace FinpeApi.Banks
         public BankStatement GetLatestStatement() => BankStatements
             .OrderBy(x => x.ExecutionDate)
             .Last();
+
+        public BankStatement NewBankStatement(decimal amount, DateTime executionDate)
+        {
+            return BankStatement.Create(this, executionDate, amount);
+        }
     }
 }
