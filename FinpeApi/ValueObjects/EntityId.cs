@@ -7,7 +7,7 @@ namespace FinpeApi.ValueObjects
         public static EntityId Create(int value)
         {
             if (value <= 0)
-                throw new ArgumentException("Must supply a valid id", "value");
+                throw new ArgumentException("Must supply a valid id", nameof(value));
 
             return new EntityId(value);
         }

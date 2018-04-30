@@ -7,7 +7,7 @@ namespace FinpeApi.ValueObjects
         public static MoneyAmount Create(decimal value)
         {
             if (value % 0.01m != 0)
-                throw new ArgumentException("Must supply an amount with max precision of 2 decimals", "value");
+                throw new ArgumentException("Must supply an amount with max precision of 2 decimals", nameof(value));
 
             return new MoneyAmount(value);
         }

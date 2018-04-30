@@ -11,7 +11,7 @@ namespace FinpeApi.Statements
         public static Statement CreateOutcome(StatementDescription description, MoneyAmount amount, DateTime dueDate, Category category)
         {
             if (!category.Exists())
-                throw new ArgumentException("Cannot assign categories not present on database", "category");
+                throw new ArgumentException("Cannot assign categories not present on database", nameof(category));
 
             return new Statement()
             {

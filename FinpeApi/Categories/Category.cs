@@ -12,7 +12,7 @@ namespace FinpeApi.Categories
         public static Category Create(string categoryName)
         {
             if (string.IsNullOrEmpty(categoryName))
-                throw new ArgumentException("Must supply a valid category name", "categoryName");
+                throw new ArgumentException("Must supply a valid category name", nameof(categoryName));
 
             return new Category()
             {

@@ -7,7 +7,7 @@ namespace FinpeApi.ValueObjects
         public static StatementDescription Create(string value)
         {
             if (string.IsNullOrEmpty(value))
-                throw new ArgumentException("Must supply a valid description", "value");
+                throw new ArgumentException("Must supply a valid description", nameof(value));
 
             return new StatementDescription(value);
         }
