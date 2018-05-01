@@ -18,6 +18,7 @@ namespace FinpeApi.Overviews
         public IReadOnlyList<StatementDto> PendingStatements { get; private set; }
         public IReadOnlyList<string> Categories { get; private set; }
         public decimal BankAmount { get; private set; }
+        public decimal InitialAmountBalance { get; private set; }
         public string MonthName { get; private set; }
         public int Year { get; private set; }
 
@@ -26,9 +27,9 @@ namespace FinpeApi.Overviews
 
         private OverviewDto(MonthYear monthYear, MonthSummary summary, IReadOnlyList<Category> categories)
         {
-            this.monthYear = monthYear ?? throw new ArgumentNullException("monthYear");
-            this.summary = summary ?? throw new ArgumentNullException("summary");
-            this.categories = categories ?? throw new ArgumentNullException("categories");
+            this.monthYear = monthYear ?? throw new ArgumentNullException(nameof(monthYear));
+            this.summary = summary ?? throw new ArgumentNullException(nameof(summary));
+            this.categories = categories ?? throw new ArgumentNullException(nameof(categories));
 
             BuildOverview();
         }
@@ -41,6 +42,7 @@ namespace FinpeApi.Overviews
             Expenses = FormatExpenses();
             PendingStatements = FormatPendingStatements();
             BankAmount = summary.GetCurrentBalance();
+            InitialAmountBalance = summary.GetInitialBalance();
             Categories = GetCategories();
         }
 

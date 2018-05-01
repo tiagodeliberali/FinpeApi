@@ -13,7 +13,7 @@ namespace FinpeApi.Test
     {
         private const string IncomeCategoryName = "outcome-category";
         private const string IncomePaidCategoryName = "paid-outcome-category";
-
+        
         [Fact]
         public void GetTotalIncome()
         {
@@ -124,6 +124,28 @@ namespace FinpeApi.Test
 
             // Assert
             Assert.Equal(-99.20m, result);
+        }
+
+        [Fact]
+        public void GetInitialBalance_MultipleStatementsInOneBank()
+        {
+            // Arrange
+            var statementList = new List<Statement>();
+            var bankList = new List<Bank>()
+            {
+                BuildBank(1, new List<BankStatement> {
+                    BuildBankStatement(200.50m, DateTime.Parse("2018-04-01")),
+                    BuildBankStatement(300.80m, DateTime.Parse("2018-04-02"))
+                })
+            };
+
+            var summary = new MonthSummary(statementList, bankList);
+
+            // Act
+            decimal result = summary.GetInitialBalance();
+
+            // Assert
+            Assert.Equal(200.50m, result);
         }
 
         private IReadOnlyList<Statement> BuildStatementList()

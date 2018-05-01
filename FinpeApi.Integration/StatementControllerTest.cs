@@ -4,7 +4,6 @@ using FinpeApi.Models;
 using FinpeApi.Statements;
 using FinpeApi.Integration.DatabaseDTOs;
 using FinpeApi.Utils;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Linq;
@@ -17,18 +16,20 @@ namespace FinpeApi.Integration
     {
         private FinpeDbContext db;
         private DbUtils dbUtils;
+        private TestsUtils testsUtils;
 
         public StatementControllerTest()
         {
-            SetDbContext();
             dbUtils = new DbUtils();
+            testsUtils = new TestsUtils(dbUtils);
+            SetDbContext();
         }
 
         [Fact]
         public async Task MarkStatementAsPaid()
         {
             // Arrange
-            int statementId = AddSingleStatement();
+            int statementId = testsUtils.AddSingleStatement();
             DateTime currentDateTime = DateTime.Parse("2018-04-21");
             
             var sut = BuildStatementController(currentDateTime);
@@ -46,7 +47,7 @@ namespace FinpeApi.Integration
         public async Task UpdateAmount()
         {
             // Arrange
-            int statementId = AddSingleStatement();
+            int statementId = testsUtils.AddSingleStatement();
             
             var sut = BuildStatementController();
 
@@ -63,7 +64,7 @@ namespace FinpeApi.Integration
         public async Task UpdateBalance()
         {
             // Arrange
-            int bankId = AddSingleBank();
+            int bankId = testsUtils.AddSingleBank();
             DateTime currentDateTime = DateTime.Parse("2018-04-28");
 
             var sut = BuildStatementController(currentDateTime);
@@ -83,7 +84,7 @@ namespace FinpeApi.Integration
         public async Task AddStatement()
         {
             // Arrange
-            CleanAll();
+            testsUtils.CleanAll();
             DateTime currentDateTime = DateTime.Parse("2018-04-21");
 
             var sut = BuildStatementController();
@@ -107,12 +108,7 @@ namespace FinpeApi.Integration
         {
             if (db == null)
             {
-                DbContextOptionsBuilder contextBuidler = new DbContextOptionsBuilder();
-                contextBuidler.UseSqlServer(DbUtils.GetConnectionString());
-                FinpeDbContext dbContext = new FinpeDbContext(contextBuidler.Options);
-                dbContext.Database.Migrate();
-
-                db = dbContext;
+                db = testsUtils.GetDbContext();
             }
         }
 
@@ -123,51 +119,6 @@ namespace FinpeApi.Integration
                 new CategoryRepository(db),
                 new BankRepository(db),
                 MockDateService(dateTime));
-        }
-
-        private int AddSingleStatement()
-        {
-            CleanAll();
-
-            DbCategoryDto category = new DbCategoryDto()
-            {
-                Name = "TestCategory"
-            };
-            dbUtils.Insert(category);
-
-            DbStatementDto statement = new DbStatementDto()
-            {
-                Amount = 10,
-                Direction = 0,
-                DueDate = DateTime.Parse("2018-04-15"),
-                Paid = false,
-                CategoryId = category.Id,
-                Description = "Test Description"
-            };
-            dbUtils.Insert(statement);
-
-            return statement.Id;
-        }
-
-        private int AddSingleBank()
-        {
-            CleanAll();
-
-            DbBankDto bank = new DbBankDto()
-            {
-                Name = "Test bank"
-            };
-            dbUtils.Insert(bank);
-
-            return bank.Id;
-        }
-
-        private void CleanAll()
-        {
-            dbUtils.DeteleAll<DbStatementDto>();
-            dbUtils.DeteleAll<DbCategoryDto>();
-            dbUtils.DeteleAll<DbBankStatementDto>();
-            dbUtils.DeteleAll<DbBankDto>();
         }
 
         private static IDateService MockDateService(DateTime? currentDateTime)

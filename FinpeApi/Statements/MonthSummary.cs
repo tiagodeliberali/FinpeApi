@@ -13,8 +13,8 @@ namespace FinpeApi.Statements
 
         public MonthSummary(IReadOnlyList<Statement> statements, IReadOnlyList<Bank> banks)
         {
-            this.statements = statements ?? throw new ArgumentNullException("statements");
-            this.banks = banks ?? throw new ArgumentNullException("banks");
+            this.statements = statements ?? throw new ArgumentNullException(nameof(statements));
+            this.banks = banks ?? throw new ArgumentNullException(nameof(banks));
         }
 
         public MoneyAmount GetTotalIncome() => statements.Where(x => x.Direction == StatementDirection.Income).Sum(x => x.Amount.Value);
@@ -39,6 +39,12 @@ namespace FinpeApi.Statements
                 .Sum(x => x.Amount);
 
             return bankBalance - outcomePaidBalance;
+        }
+
+        public decimal GetInitialBalance()
+        {
+            BankStatement statement = banks.First().BankStatements.FirstOrDefault();
+            return statement == null ? 0m : statement.Amount.Value;
         }
     }
 }

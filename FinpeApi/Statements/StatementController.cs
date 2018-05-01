@@ -62,7 +62,7 @@ namespace FinpeApi.Statements
 
         public async Task UpdateBalance(decimal amount)
         {
-            var bank = bankRepository.GetList().First();
+            var bank = bankRepository.GetList(dateService.GetCurrentMonthYear()).First();
             var statement = bank.NewBankStatement(amount, dateService.GetCurrentDateTime());
 
             await bankRepository.SaveStatement(statement);
@@ -73,7 +73,7 @@ namespace FinpeApi.Statements
             MonthYear monthYear = dateService.GetCurrentMonthYear();
 
             IReadOnlyList<Statement> statements = await statementRepository.GetList(monthYear);
-            IReadOnlyList<Bank> banks = bankRepository.GetList();
+            IReadOnlyList<Bank> banks = bankRepository.GetList(dateService.GetCurrentMonthYear());
             IReadOnlyList<Category> categories = categoryRepository.GetList();
 
             MonthSummary summary = new MonthSummary(statements, banks);
