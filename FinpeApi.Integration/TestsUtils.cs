@@ -1,6 +1,4 @@
 ﻿using FinpeApi.Integration.DatabaseDTOs;
-using FinpeApi.Models;
-using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace FinpeApi.Integration
@@ -57,16 +55,6 @@ namespace FinpeApi.Integration
             dbUtils.DeteleAll<DbCategoryDto>();
             dbUtils.DeteleAll<DbBankStatementDto>();
             dbUtils.DeteleAll<DbBankDto>();
-        }
-
-        public FinpeDbContext GetDbContext()
-        {
-            DbContextOptionsBuilder contextBuidler = new DbContextOptionsBuilder();
-            contextBuidler.UseSqlServer(DbUtils.GetConnectionString());
-            FinpeDbContext dbContext = new FinpeDbContext(contextBuidler.Options);
-            dbContext.Database.Migrate();
-
-            return dbContext;
         }
     }
 }

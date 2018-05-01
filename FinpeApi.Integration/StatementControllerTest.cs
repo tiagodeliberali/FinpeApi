@@ -1,6 +1,5 @@
 ﻿using FinpeApi.Banks;
 using FinpeApi.Categories;
-using FinpeApi.Models;
 using FinpeApi.Statements;
 using FinpeApi.Integration.DatabaseDTOs;
 using FinpeApi.Utils;
@@ -9,12 +8,13 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using FinpeApi.ValueObjects;
 
 namespace FinpeApi.Integration
 {
+    [Collection("IntegrationTests")]
     public class StatementControllerTest
     {
-        private FinpeDbContext db;
         private DbUtils dbUtils;
         private TestsUtils testsUtils;
 
@@ -22,7 +22,6 @@ namespace FinpeApi.Integration
         {
             dbUtils = new DbUtils();
             testsUtils = new TestsUtils(dbUtils);
-            SetDbContext();
         }
 
         [Fact]
@@ -104,20 +103,12 @@ namespace FinpeApi.Integration
             Assert.Equal(category.Id, statement.CategoryId);
         }
 
-        private void SetDbContext()
-        {
-            if (db == null)
-            {
-                db = testsUtils.GetDbContext();
-            }
-        }
-
         private  StatementController BuildStatementController(DateTime? dateTime = null)
         {
             return new StatementController(
-                new StatementRepository(db),
-                new CategoryRepository(db),
-                new BankRepository(db),
+                new StatementRepository(dbUtils.DbContext),
+                new CategoryRepository(dbUtils.DbContext),
+                new BankRepository(dbUtils.DbContext),
                 MockDateService(dateTime));
         }
 
@@ -126,7 +117,11 @@ namespace FinpeApi.Integration
             Mock<IDateService> dateServiceMock = new Mock<IDateService>();
 
             if (currentDateTime.HasValue)
-                dateServiceMock.Setup(x => x.GetCurrentDateTime()).Returns(currentDateTime.Value);
+            {
+                DateTime date = currentDateTime.Value;
+                dateServiceMock.Setup(x => x.GetCurrentDateTime()).Returns(date);
+                dateServiceMock.Setup(x => x.GetCurrentMonthYear()).Returns(MonthYear.Create(date.Year, date.Month));
+            }
 
             return dateServiceMock.Object;
         }

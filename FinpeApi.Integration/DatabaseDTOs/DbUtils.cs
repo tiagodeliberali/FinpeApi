@@ -1,4 +1,6 @@
 ﻿using Dapper;
+using FinpeApi.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -8,12 +10,14 @@ namespace FinpeApi.Integration.DatabaseDTOs
     public class DbUtils
     {
         private SqlConnection connection;
+        public FinpeDbContext DbContext { get; }
 
-        public static string GetConnectionString() => 
+        public static string GetConnectionString() =>
             "Server=tcp:database,1433;Initial Catalog=finpedb;Persist Security Info=False;User ID=SA;Password=P24d!dBX!qRf;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;";
 
         public DbUtils()
         {
+            DbContext = ConnectionManager.DbContext;
             SqlConnection connection = new SqlConnection(DbUtils.GetConnectionString());
             connection.Open();
             this.connection = connection;
