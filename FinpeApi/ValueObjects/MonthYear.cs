@@ -26,5 +26,10 @@ namespace FinpeApi.ValueObjects
         }
 
         public string GetMonthName() => CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Month);
+
+        public DateTime GetFirstDay()
+        {
+            return new DateTime(Year, Month, 1);
+        }
     }
 }

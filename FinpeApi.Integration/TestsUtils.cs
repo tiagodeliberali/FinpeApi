@@ -12,6 +12,19 @@ namespace FinpeApi.Integration
             this.dbUtils = dbUtils;
         }
 
+        public int AddSingleCategory()
+        {
+            CleanAll(); ;
+
+            DbCategoryDto category = new DbCategoryDto()
+            {
+                Name = "TestCategory"
+            };
+            dbUtils.Insert(category);
+
+            return category.Id;
+        }
+
         public int AddSingleStatement()
         {
             CleanAll();

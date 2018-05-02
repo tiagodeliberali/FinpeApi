@@ -45,5 +45,18 @@ namespace FinpeApi.Test
             // Assert
             Assert.Throws<ArgumentException>(create);
         }
+
+        [Fact]
+        public void ShouldReturnFirstDayOfMonthYear()
+        {
+            // Arrange
+            MonthYear monthYear = MonthYear.Create(2018, 5);
+
+            // Act
+            DateTime firstDay = monthYear.GetFirstDay();
+
+            // Assert
+            Assert.Equal(DateTime.Parse("2018-05-01"), firstDay);
+        }
     }
 }
