@@ -127,6 +127,22 @@ namespace FinpeApi.Test
         }
 
         [Fact]
+        public void GetCurrentBalance_NoBankStatementsAndPaidStatements()
+        {
+            // Arrange
+            var statementList = BuildStatementList();
+            List<Bank> bankList = new List<Bank>() { new Bank() };
+
+            var summary = new MonthSummary(statementList, bankList);
+
+            // Act
+            decimal result = summary.GetCurrentBalance();
+
+            // Assert
+            Assert.Equal(-500.20m, result);
+        }
+
+        [Fact]
         public void GetInitialBalance_MultipleStatementsInOneBank()
         {
             // Arrange

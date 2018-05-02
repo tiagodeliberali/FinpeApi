@@ -10,9 +10,17 @@ namespace FinpeApi.Banks
         public string Name { get; private set; }
         public IReadOnlyList<BankStatement> BankStatements { get; private set; }
 
-        public BankStatement GetLatestStatement() => BankStatements
-            .OrderBy(x => x.ExecutionDate)
-            .Last();
+        public BankStatement GetLatestStatement()
+        {
+            if (BankStatements == null || BankStatements.Count == 0)
+            {
+                return null;
+            }
+
+            return BankStatements
+                .OrderBy(x => x.ExecutionDate)
+                .Last();
+        }
 
         public BankStatement NewBankStatement(decimal amount, DateTime executionDate)
         {

@@ -42,5 +42,18 @@ namespace FinpeApi.Test
             // Assert
             Assert.Throws<ArgumentException>(createStatement);
         }
+
+        [Fact]
+        public void GetLatestStatement_ShouldReturnNullIfNothingAvailable()
+        {
+            // Arrange
+            Bank bank = new Bank();
+
+            // Act
+            BankStatement nullStatement = bank.GetLatestStatement();
+
+            // Assert
+            Assert.Null(nullStatement);
+        }
     }
 }

@@ -30,13 +30,27 @@ namespace FinpeApi.Statements
 
         public MoneyAmount GetCurrentBalance()
         {
-            DateTime latestDate = banks.First().GetLatestStatement().ExecutionDate;
+            DateTime? latestDate = banks.First().GetLatestStatement()?.ExecutionDate;
 
-            decimal bankBalance = banks.Sum(x => x.GetLatestStatement().Amount);
+            decimal bankBalance;
+            decimal outcomePaidBalance;
 
-            decimal outcomePaidBalance = statements
-                .Where(x => x.Paid && x.Direction == StatementDirection.Outcome && x.PaymentDate > latestDate)
-                .Sum(x => x.Amount);
+            if (latestDate.HasValue)
+            {
+                bankBalance = banks.Sum(x => x.GetLatestStatement().Amount);
+
+                outcomePaidBalance = statements
+                    .Where(x => x.Paid && x.Direction == StatementDirection.Outcome && x.PaymentDate > latestDate)
+                    .Sum(x => x.Amount);
+            }
+            else
+            {
+                bankBalance = 0;
+
+                outcomePaidBalance = statements
+                    .Where(x => x.Paid && x.Direction == StatementDirection.Outcome)
+                    .Sum(x => x.Amount);
+            }
 
             return bankBalance - outcomePaidBalance;
         }
