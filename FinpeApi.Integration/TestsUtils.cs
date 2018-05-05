@@ -7,6 +7,10 @@ namespace FinpeApi.Integration
     {
         private DbUtils dbUtils;
 
+        public static int CLOSING_DAY = 15;
+        public static int PAYMENT_DAY = 20;
+        public static DateTime DEFAULT_DATE = DateTime.Parse("2018-04-15");
+
         public TestsUtils(DbUtils dbUtils)
         {
             this.dbUtils = dbUtils;
@@ -39,7 +43,7 @@ namespace FinpeApi.Integration
             {
                 Amount = 10,
                 Direction = 0,
-                DueDate = DateTime.Parse("2018-04-15"),
+                DueDate = DEFAULT_DATE,
                 Paid = false,
                 CategoryId = category.Id,
                 Description = "Test Description"
@@ -62,12 +66,34 @@ namespace FinpeApi.Integration
             return bank.Id;
         }
 
+        public DbCreditCardDto AddSingleCreditCard()
+        {
+            int categoryId = AddSingleCategory();
+
+            DbCreditCardDto creditCard = new DbCreditCardDto()
+            {
+                Name = "Test bank",
+                ClosingDay = CLOSING_DAY,
+                CategoryId = categoryId,
+                PaymentDay = PAYMENT_DAY,
+                EndNumbers = 4321,
+                Owner = "teste@teste.com"
+
+            };
+            dbUtils.Insert(creditCard);
+
+            return creditCard;
+        }
+
         public void CleanAll()
         {
             dbUtils.DeteleAll<DbStatementDto>();
-            dbUtils.DeteleAll<DbCategoryDto>();
             dbUtils.DeteleAll<DbBankStatementDto>();
             dbUtils.DeteleAll<DbBankDto>();
+            dbUtils.DeteleAll<DbCreditCardStatementDto>();
+            dbUtils.DeteleAll<DbCreditCardBillDto>();
+            dbUtils.DeteleAll<DbCreditCardDto>();
+            dbUtils.DeteleAll<DbCategoryDto>();
         }
     }
 }

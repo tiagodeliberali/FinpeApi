@@ -1,4 +1,5 @@
 ﻿using FinpeApi.Banks;
+using FinpeApi.CreditCards;
 using FinpeApi.Integration.DatabaseDTOs;
 using FinpeApi.Statements;
 using FinpeApi.ValueObjects;
@@ -25,6 +26,8 @@ namespace FinpeApi.Integration
         public void GetBankStatement()
         {
             // Arrange
+            testsUtils.CleanAll();
+
             int bankId = testsUtils.AddSingleBank();
             dbUtils.Insert(new DbBankStatementDto()
             {
@@ -60,6 +63,8 @@ namespace FinpeApi.Integration
         public async Task GetPastPendingStatement()
         {
             // Arrange
+            testsUtils.CleanAll();
+
             int categoryId = testsUtils.AddSingleCategory();
             dbUtils.Insert(new DbStatementDto()
             {
